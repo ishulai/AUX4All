@@ -1,0 +1,15 @@
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
+const routes = require("./routes/index.js");
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+const router = express.Router();
+
+routes(router);
+
+const port = 8080;
+app.listen(process.env.PORT || port);
+console.log("REST API listening on port " + port);
