@@ -3,7 +3,9 @@ const search = (router, engine) => {
         const params = req.body;
         const query = params.query;
         engine.search(query, results => {
-            res.send(results);
+            res.send({
+                results: results
+            });
         });
     });
 }
