@@ -12,10 +12,11 @@ Call this initially when the user loads the app; this generates a unique ID for 
 http://{url}/connect
 ```
 ###### Parameters
-- **None**
+- **<code>string</code> nickname** — User's chosen nickname.
 ###### Return Format
 - **<code>string</code> user_id** — Unique ID that's used for future API calls.
 
+---
 
 ### Add Song
 Adds song to queue.
@@ -29,6 +30,7 @@ http://{url}/addsong
 ###### Return Format
 - **None**
 
+---
 
 ### Vote
 Allows user to vote on currently-playing song.
@@ -42,6 +44,7 @@ http://{url}/vote
 ###### Return Format
 - **None**
 
+---
 
 ### Get Next Song
 Starts playing next song and returns song info.
@@ -52,4 +55,58 @@ http://{url}/getnext
 ###### Parameters
 - **None**
 ###### Return Format
-- **<code>JSON</code> song_info**
+- **<code>JSON</code> song_info** — See example for details.
+
+---
+
+### Get Current Status
+Gets current status (including users, queue, etc)
+###### Endpoint
+```
+http://{url}/getstatus
+```
+###### Parameters
+- **None**
+###### Return Format
+- **<code>JSON</code> current_status** — See example for details.
+###### Example Result
+```
+{
+    "users": [
+        {
+            "id": "b2216526-c3e2-4150-a95d-262b01cdd06a",
+            "nickname": "Matthew",
+            "votes": 5
+        },
+        {
+            "id": "2e2f4c21-70b0-4309-b2ee-587ecf2afe62",
+            "nickname": "Solomon",
+            "votes": 7
+        }
+    ],
+    "queue": [ // Doesn't include current song
+        {
+            "song_id": "b69b02af-7987-4bb6-88fa-76c960af3887",
+            "user_id": "2e2f4c21-70b0-4309-b2ee-587ecf2afe62"
+        },
+        {
+            "song_id": "8c61c869-6a88-4218-a2d5-2d49cfb0819a",
+            "user_id": "b2216526-c3e2-4150-a95d-262b01cdd06a"
+        },
+        {
+            "song_id": "e08bc246-a6a2-4797-87d7-1cb0f735aea9",
+            "user_id": "2e2f4c21-70b0-4309-b2ee-587ecf2afe62"
+        }
+    ],
+    "current_song": {
+        "song_id": "ef8193bf-2c0b-40f3-ae60-fe472dd696fa",
+        "user_id": "b2216526-c3e2-4150-a95d-262b01cdd06a",
+        "upvotes": 3,
+        "downvotes": 1,
+        "votes": 2, // upvotes - downvotes
+        "title": "Despacito",
+        "artist": "Luis Fonsi",
+        "album": "Summer Anthems 2017"
+    },
+}
+```
