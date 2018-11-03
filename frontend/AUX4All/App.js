@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { StyleSheet, Text, View, SafeAreaView, FlatList, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons'
 import {List, ListItem, SearchBar} from 'react-native-elements';
@@ -11,6 +11,8 @@ class UploadScreen extends Component {
       loading: false,
       data: [],
       error: null,
+      query: "",
+      fullData: [],
     };
 
   this.arrayholder = [];
@@ -110,15 +112,27 @@ class UploadScreen extends Component {
 class MusicScreen extends Component {
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Music Screen</Text>
+    <View style={styles.container}>
+      <Text style={styles.text}>
+        Now Playing
+      </Text>
+
+      <View style={styles.buttons}>
+        <TouchableOpacity style={styles.touchableOpacity}>
+          <Icon name={"ios-thumbs-up"}  size={60} color="green" />
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.touchableOpacity}>
+          <Icon name={"ios-thumbs-down"}  size={60} color="red" />
+        </TouchableOpacity>
       </View>
+    </View>
     );
   }
 }
 
 export default createMaterialBottomTabNavigator({
-  Upload: { screen: UploadScreen,
+  Upload: {screen: UploadScreen,
           navigationOptions: {
             tabBarLabel:'Upload',
             tabBarIcon:({tintColor}) => (
@@ -136,14 +150,34 @@ export default createMaterialBottomTabNavigator({
   activeTintColor: 'blue',
   inactiveTintColor: 'grey',
   barStyle: {backgroundColor: 'black'}
-}
-);
+});
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#000000',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
+  },
+  buttons: {
+    flex: 2,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  touchableOpacity: {
+    borderWidth:1,
+    backgroundColor:'black',
+    borderColor:'white',
+    alignItems:'center',
+    justifyContent:'center',
+    width:100,
+    height:100,
+    borderRadius:100,
+  },
+  text: {
+    color: 'white',
+    fontSize: 36,
+    marginTop: 48,
+    textAlign: 'center'
   },
 });
