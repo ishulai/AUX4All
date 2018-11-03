@@ -2,7 +2,7 @@
 
 
 ## REST API Endpoints
-All REST API endpoints accept **only POST requests**.
+All REST API endpoints accept **only <code>POST</code> requests**.
 
 
 ### Connect
