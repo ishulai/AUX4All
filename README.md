@@ -133,14 +133,16 @@ http://{url}/search
             "title": "Despacito",
             "artist": "Luis Fonsi",
             "album": "Summer Anthems 2017",
-            "album_cover": "https://img.discogs.com/_Ys4oxfbTXmWIRZtRdCjf2HoPnM=/fit-in/600x520/filters:strip_icc():format(jpeg):mode_rgb():quality(90)/discogs-images/R-10099368-1495223837-7850.jpeg.jpg"
+            "album_cover": "https://img.discogs.com/_Ys4oxfbTXmWIRZtRdCjf2HoPnM=/fit-in/600x520/filters:strip_icc():format(jpeg):mode_rgb():quality(90)/discogs-images/R-10099368-1495223837-7850.jpeg.jpg",
+            "uri": <Spotify song URI>
         },
         {
             "song_id": "8c61c869-6a88-4218-a2d5-2d49cfb0819a",
             "title": "Africa",
             "artist": "Toto",
             "album": "Toto IV",
-            "album_cover": "https://upload.wikimedia.org/wikipedia/en/b/bd/Toto_Toto_IV.jpg"
+            "album_cover": "https://upload.wikimedia.org/wikipedia/en/b/bd/Toto_Toto_IV.jpg",
+            "uri": <Spotify song URI>
         }
     ]
 }
