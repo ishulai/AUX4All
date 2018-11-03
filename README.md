@@ -5,7 +5,7 @@
 All REST API endpoints accept **only POST requests**.
 
 
-#### Connect
+### Connect
 Call this initially when the user loads the app; this generates a unique ID for the user that can be used for future calls.
 ###### Endpoint
 ```
@@ -17,7 +17,7 @@ http://{url}/connect
 - **<code>string</code> user_id** — Unique ID that's used for future API calls.
 
 
-#### Add Song
+### Add Song
 Adds song to queue.
 ###### Endpoint
 ```
@@ -30,7 +30,7 @@ http://{url}/addsong
 - **None**
 
 
-#### Vote
+### Vote
 Allows user to vote on currently-playing song.
 ###### Endpoint
 ```
@@ -43,7 +43,7 @@ http://{url}/vote
 - **None**
 
 
-#### Get Next Song
+### Get Next Song
 Starts playing next song and returns song info.
 ###### Endpoint
 ```
