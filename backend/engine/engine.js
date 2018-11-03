@@ -17,11 +17,16 @@ class engine {
     }
 
     getNext() {
-        this.currentUser = (this.currentUser + 1) % this.users.length;
-        const s = this.users[this.currentUser].getNext();
+        this.nextUser();
+        let s = this.users[this.currentUser].getNext()
+        while(s === false) this.nextUser();
         this.lastSong = this.currentSong;
         this.currentSong = s;
         return s;
+    }
+
+    nextUser() {
+        this.currentUser = (this.currentUser + 1) % this.users.length;
     }
 
     upvote() {

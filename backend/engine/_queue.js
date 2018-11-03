@@ -10,7 +10,7 @@ class queue {
     } 
 
     getNext() {
-        return this.songs.shift();
+        return (this.songs.length) ? this.songs.shift() : false;
     }
 }
 
