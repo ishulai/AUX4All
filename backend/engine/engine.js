@@ -37,8 +37,8 @@ class engine {
         this.currentSong.downvote(userId);
     }
 
-    addSong(userId, songId) {
-        this.users.find(user => user.getId() === userId).addSong(songId);
+    addSong(userId, uri) {
+        this.users.find(user => user.getId() === userId).addSong(uri);
     }
 
     getUsers() {

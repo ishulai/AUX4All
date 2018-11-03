@@ -1,8 +1,8 @@
 const vote = require("./_vote");
 
 class song {
-    constructor(songId) {
-        this.songId = songId;
+    constructor(uri) {
+        this.uri = uri;
         this.id = this._uuid();
         this.votes = [];
     }
@@ -33,7 +33,8 @@ class song {
             title: "",
             artist: "",
             album: "",
-            album_cover: ""
+            album_cover: "",
+            uri: this.uri
         }
     }
 }

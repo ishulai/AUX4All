@@ -26,7 +26,7 @@ http://{url}/addsong
 ```
 ###### Parameters
 - **<code>string</code> user_id** — Unique user ID.
-- **<code>string</code> song_id** — Unique song ID.
+- **<code>string</code> uri** — Spotify song URI.
 ###### Return Format
 - **None**
 
@@ -115,7 +115,7 @@ http://{url}/getstatus
 ---
 
 ### Search
-Gets current status (including users, queue, etc)
+Searches for songs based on keywords.
 ###### Endpoint
 ```
 http://{url}/search
