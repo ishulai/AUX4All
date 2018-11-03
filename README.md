@@ -106,7 +106,42 @@ http://{url}/getstatus
         "votes": 2, // upvotes - downvotes
         "title": "Despacito",
         "artist": "Luis Fonsi",
-        "album": "Summer Anthems 2017"
-    },
+        "album": "Summer Anthems 2017",
+        "album_cover": "https://img.discogs.com/_Ys4oxfbTXmWIRZtRdCjf2HoPnM=/fit-in/600x520/filters:strip_icc():format(jpeg):mode_rgb():quality(90)/discogs-images/R-10099368-1495223837-7850.jpeg.jpg"
+    }
+}
+```
+
+---
+
+### Search
+Gets current status (including users, queue, etc)
+###### Endpoint
+```
+http://{url}/search
+```
+###### Parameters
+- **<code>string</code> query** — User-inputted search query.
+###### Return Format
+- **<code>JSON</code> results** — List of search results; see example for details.
+###### Example Result
+```
+{
+    "results": [
+        {
+            "song_id": "b69b02af-7987-4bb6-88fa-76c960af3887",
+            "title": "Despacito",
+            "artist": "Luis Fonsi",
+            "album": "Summer Anthems 2017",
+            "album_cover": "https://img.discogs.com/_Ys4oxfbTXmWIRZtRdCjf2HoPnM=/fit-in/600x520/filters:strip_icc():format(jpeg):mode_rgb():quality(90)/discogs-images/R-10099368-1495223837-7850.jpeg.jpg"
+        },
+        {
+            "song_id": "8c61c869-6a88-4218-a2d5-2d49cfb0819a",
+            "title": "Africa",
+            "artist": "Toto",
+            "album": "Toto IV",
+            "album_cover": "https://upload.wikimedia.org/wikipedia/en/b/bd/Toto_Toto_IV.jpg"
+        }
+    ]
 }
 ```
