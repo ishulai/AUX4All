@@ -54,7 +54,7 @@ class engine {
     }
 
     search(query, callback) {
-        this.api.call("searchTracks", { keyword: query }, results => {
+        this.api.callAPI("searchTracks", { keyword: query }, results => {
             console.log(results);
             callback(results);
         })

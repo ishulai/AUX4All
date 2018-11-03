@@ -7,3 +7,5 @@ const search = (router, engine) => {
         });
     });
 }
+
+module.exports = search;
