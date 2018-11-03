@@ -13,6 +13,8 @@ const router = express.Router();
 
 routes(router, new engine());
 
+app.use(router);
+
 const port = 8080;
 app.listen(process.env.PORT || port);
 console.log("REST API listening on port " + port);

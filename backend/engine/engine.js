@@ -5,12 +5,11 @@ class engine {
     constructor() {
         this.users = [];
         this.currentUser = -1;
-        this.lastSong = null;
         this.currentSong = null;
     }
 
-    addUser() {
-        const u = new user();
+    addUser(nickname) {
+        const u = new user(nickname);
         this.users.push(u);
         if(this.currentUser === -1) this.currentUser = 0;
         return u.getId();
@@ -20,7 +19,6 @@ class engine {
         this.nextUser();
         let s = this.users[this.currentUser].getNext()
         while(s === false) this.nextUser();
-        this.lastSong = this.currentSong;
         this.currentSong = s;
         return s;
     }
@@ -29,16 +27,28 @@ class engine {
         this.currentUser = (this.currentUser + 1) % this.users.length;
     }
 
-    upvote() {
-        this.lastSong.upvote();
+    upvote(userId) {
+        this.currentSong.upvote(userId);
     }
 
-    downvote() {
-        this.lastSong.downvote();
+    downvote(userId) {
+        this.currentSong.downvote(userId);
     }
 
     addSong(userId, songId) {
         this.users.find(user => user.getId() === userId).addSong(songId);
+    }
+
+    getUsers() {
+        return this.users.map(user => user.toJson());
+    }
+
+    getQueue() {
+        return [];
+    }
+
+    getCurrentSong() {
+        return this.currentSong.toJson();
     }
 }
 

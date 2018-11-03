@@ -1,13 +1,18 @@
 const queue = require("./_queue");
 
 class user {
-    constructor() {
+    constructor(nickname) {
         this.id = this._uuid();
+        this.nickname = nickname;
         this.queue = new queue();
     }
 
     getId() {
         return this.id;
+    }
+
+    getNickname() {
+        return this.nickname;
     }
 
     getNext() {
