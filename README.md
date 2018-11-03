@@ -129,7 +129,6 @@ http://{url}/search
 {
     "results": [
         {
-            "song_id": "b69b02af-7987-4bb6-88fa-76c960af3887",
             "title": "Despacito",
             "artist": "Luis Fonsi",
             "album": "Summer Anthems 2017",
@@ -137,7 +136,6 @@ http://{url}/search
             "uri": <Spotify song URI>
         },
         {
-            "song_id": "8c61c869-6a88-4218-a2d5-2d49cfb0819a",
             "title": "Africa",
             "artist": "Toto",
             "album": "Toto IV",

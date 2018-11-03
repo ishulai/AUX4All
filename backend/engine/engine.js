@@ -1,11 +1,13 @@
 const queue = require("./_queue");
 const user = require("./_user");
+const api = require("./_api");
 
 class engine {
     constructor() {
         this.users = [];
         this.currentUser = -1;
         this.currentSong = null;
+        this.api = new api();
     }
 
     addUser(nickname) {
@@ -49,6 +51,13 @@ class engine {
 
     getCurrentSong() {
         return this.currentSong.toJson();
+    }
+
+    search(query, callback) {
+        this.api.call("searchTracks", { keyword: query }, results => {
+            console.log(results);
+            callback(results);
+        })
     }
 }
 
