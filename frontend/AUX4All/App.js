@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { StyleSheet, Text, View, SafeAreaView, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { StyleSheet, Image, Text, View, SafeAreaView, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons'
 import {List, ListItem, SearchBar} from 'react-native-elements';
@@ -11,11 +11,7 @@ class UploadScreen extends Component {
       loading: false,
       data: [],
       error: null,
-      query: "",
-      fullData: [],
     };
-
-  this.arrayholder = [];
   }
 
   renderSeparator = () => {
@@ -29,19 +25,39 @@ class UploadScreen extends Component {
           }}
         />
       );
-    };
+  };
 
-  searchFilterFunction = text => {
-    console.log(this.arrayholder);
-    const newData = this.arrayholder.filter(item => {
-    const itemData = `${item.name.title.toUpperCase()} ${item.name.first.toUpperCase()} ${item.name.last.toUpperCase()}`;
-    const textData = text.toUpperCase();
-    return itemData.indexOf(textData) > -1;
+  testSearchQuery = (text) => {
+    if (text.length >=3) {
+      this.searchQuery(text);
+    }
+  }
+  searchQuery = (text) => {
+    const url = 'http://localhost:8080/search';
+    this.setState({ loading: true,
+                    query: text});
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        query: text,
+      }),
+    }).then(res => res.json())
+      .then(res => {
+        console.log(res.results);
+        this.setState({
+          data: res.results,
+          error: res.error || null,
+          loading: false,
+        });
+        this.arrayholder = res.results;
+      }).catch(error => {
+          this.setState({ error, loading: false });
       });
-    this.setState({
-      data: newData,
-    });
-    };
+  }
 
   renderHeader = () => {
     return (
@@ -49,12 +65,15 @@ class UploadScreen extends Component {
         placeholder="Please Enter a Song"
         darkTheme
         round
-        onChangeText={text => this.searchFilterFunction(text)}
+        onChangeText={text => this.testSearchQuery(text)}
         autoCorrect={false}
       />
     );
   };
 
+  addSongToQueue = (item) => {
+    console.log(`Adding ${item.title}`);
+  }
   render() {
     if (this.state.loading) {
       return (
@@ -63,6 +82,7 @@ class UploadScreen extends Component {
         </View>
       );
     }
+    console.log(this.state.data)
     return (
       <SafeAreaView>
         <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
@@ -70,14 +90,16 @@ class UploadScreen extends Component {
             data={this.state.data}
             renderItem={({ item }) => (
               <ListItem
-                roundAvatar
-                title={`${item.name.first} ${item.name.last}`}
-                subtitle={item.email}
-                avatar={{ uri: item.picture.thumbnail }}
+                squareAvatar
+                title={item.title}
+                subtitle={`${item.artist} - ${item.album}`}
+                avatar={{ uri: item.album_cover }}
                 containerStyle={{ borderBottomWidth: 0, backgroundColor: 'black' }}
+                keyExtractor={item => item.uri}
+                rightIcon={{name: "ios-add-circle", type: "ionicon"}}
+                onPress={() => this.addSongToQueue(item)}
               />
             )}
-            keyExtractor={item => item.email}
             ItemSeparatorComponent={this.renderSeparator}
             ListHeaderComponent={this.renderHeader}
           />
@@ -85,28 +107,6 @@ class UploadScreen extends Component {
       </SafeAreaView>
       );
     }
-
-  componentDidMount() {
-    this.makeRemoteRequest();
-  }
-
-  makeRemoteRequest = () => {
-    const url = `https://randomuser.me/api/?&results=20`;
-    this.setState({ loading: true });
-    fetch(url)
-      .then(res => res.json())
-      .then(res => {
-        this.setState({
-          data: res.results,
-          error: res.error || null,
-          loading: false,
-        });
-       this.arrayholder = res.results;
-     })
-     .catch(error => {
-       this.setState({ error, loading: false });
-     });
- };
 }
 
 class MusicScreen extends Component {
@@ -119,6 +119,7 @@ class MusicScreen extends Component {
 
       <View style={styles.buttons}>
         <TouchableOpacity style={styles.touchableOpacity}>
+
           <Icon name={"ios-thumbs-up"}  size={60} color="green" />
         </TouchableOpacity>
 
