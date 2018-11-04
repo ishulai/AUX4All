@@ -1,9 +1,33 @@
 import React, {Component} from 'react';
 import { View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import { createStackNavigator } from 'react-navigation';
-import {authorize} from 'react'
+import { AuthSession } from 'expo';
 
+const APP_ID = 'a875e545029e40339ef4a1aa070312ea';
+const scopes = 'user-modify-playback-state user-read-currently-playing'
 export default class HomeScreen extends Component {
+  constructor() {
+    super();
+    this.state = {
+      result: null,
+    };
+  }
+
+  authorize = async () => {
+    let redirectUrl = AuthSession.getRedirectUrl();
+    console.log(redirectUrl)
+      let result = await AuthSession.startAsync({
+        authUrl:
+          `https://accounts.spotify.com/authorize?` +
+          `response_type=code` +
+          `&client_id=${APP_ID}` +
+          `&scope=${encodeURIComponent(scopes)}` +
+          `&redirect_uri=${encodeURIComponent(redirectUrl)}`,
+      });
+      this.setState({ code : result.code});
+    console.log(result);
+}
+
   render() {
     return (
       <View style={[{flex: 1}, styles.elementsContainer]}>
@@ -27,7 +51,7 @@ export default class HomeScreen extends Component {
   }
 
   onPressButton = () => {
-       this.props.navigation.navigate('TabScreen')
+    const result = this.authorize();
   }
 }
 
