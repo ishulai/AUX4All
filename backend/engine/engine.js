@@ -29,8 +29,8 @@ class engine {
         })
     }
 
-    createRoom(token) {
-        const r = new room(token);
+    createRoom(token, redirect_uri) {
+        const r = new room(token, redirect_uri);
         this.rooms.push(r);
         return r.getPin();
     }

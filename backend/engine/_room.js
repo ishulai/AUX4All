@@ -2,16 +2,17 @@ const user = require("./_user");
 const api = require("./_api");
 
 class room {
-    constructor(token) {
+    constructor(token, redirect_uri) {
         this.pin = Math.floor(Math.random() * 999999) + "";
         while(this.pin.length < 6) this.pin = "0" + this.pin;
         this.token = "";
+        this.redirect_uri = redirect_uri;
         this.users = [];
         this.currentUser = -1;
         this.currentSong = null;
         this.api = new api();
         this.playState = null;
-        this.api.codeToToken(token, t => {
+        this.api.codeToToken(token, redirect_uri, t => {
             this.token = t;
             setInterval(() => {
                 this.updatePlayState();
@@ -64,7 +65,7 @@ class room {
     downvote() {
         this.users[this.currentUser].downvote();
         this.downvotes++;
-        if(this.downvotes === this.users.length) this.playNextSong();
+        if(this.downvotes >= this.users.length) this.playNextSong();
     }
 
     addSong(userId, uri) {

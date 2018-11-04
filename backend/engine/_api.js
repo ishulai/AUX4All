@@ -103,7 +103,7 @@ class api {
         });
     }
 
-    codeToToken(code, callback) {
+    codeToToken(code, redirect_uri, callback) {
         var options = {
             url: 'https://accounts.spotify.com/api/token',
             method: 'POST',
@@ -114,7 +114,7 @@ class api {
             form: {
                 'grant_type': 'authorization_code',
                 'code': code,
-                'redirect_uri': 'https://auth.expo.io/@solomon.joseph/AUX4All'
+                'redirect_uri': redirect_uri
             }
         };
         request(options, (error, response, body) => {
