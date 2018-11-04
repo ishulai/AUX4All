@@ -15,7 +15,6 @@ export default class HomeScreen extends Component {
 
   authorize = async () => {
     let redirectUrl = AuthSession.getRedirectUrl();
-    console.log(redirectUrl)
       let result = await AuthSession.startAsync({
         authUrl:
           `https://accounts.spotify.com/authorize?` +
@@ -24,9 +23,35 @@ export default class HomeScreen extends Component {
           `&scope=${encodeURIComponent(scopes)}` +
           `&redirect_uri=${encodeURIComponent(redirectUrl)}`,
       });
-      this.setState({ code : result.code});
-    console.log(result);
-}
+      this.setState({ token : result.params.code});
+      this.createRoom(result.params.code)
+  }
+
+  createRoom = (token) => {
+    const url = 'http://localhost:8080/createroom';
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        token: token,
+      }),
+    }).then(res => res.json())
+      .then(res => {
+        this.setState({
+          data: res,
+          error: res.error || null,
+          loading: false,
+        });
+        userId = this.state.data.user_id
+        roomPin = this.state.data.pin
+        this.props.navigation.navigate("CodeScreen");
+      }).catch(error => {
+          this.setState({ error, loading: false });
+      });
+  }
 
   render() {
     return (
@@ -36,13 +61,13 @@ export default class HomeScreen extends Component {
           <TouchableOpacity
             style={styles.buttonStyle}
             activeOpacity = {.5}
-            onPress={this.onPressButton}>
+            onPress={this.authorize}>
             <Text style={styles.textStyle}> Create a Room </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.buttonStyle}
             activeOpacity = {.5}
-            onPress={this.onPressButton}>
+            onPress={this.onPressJoinButton}>
             <Text style={styles.textStyle}> Join a Room </Text>
           </TouchableOpacity>
           </View>
@@ -50,8 +75,8 @@ export default class HomeScreen extends Component {
     );
   }
 
-  onPressButton = () => {
-    const result = this.authorize();
+  onPressJoinButton = () => {
+    this.props.navigation.navigate('JoinScreen');
   }
 }
 
@@ -79,7 +104,7 @@ const styles = StyleSheet.create({
     backgroundColor:'black',
     borderRadius:20,
     borderWidth: 1,
-    borderColor: '#1e90ff',
+    borderColor: 'white',
     alignItems: 'stretch',
     justifyContent: 'center'
   },

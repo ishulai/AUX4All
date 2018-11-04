@@ -27,6 +27,24 @@ class UploadScreen extends Component {
       );
   };
 
+  addSong = (item) => {
+    const url = 'http://localhost:8080/addsong';
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        user_id: userId,
+        uri: item.uri,
+        pin: roomPin
+      }),
+    }).catch(error => {
+          this.setState({ error, loading: false });
+      });
+  }
+
   searchQuery = (text) => {
     const url = 'http://localhost:8080/search';
     this.setState({ loading: true,
@@ -48,7 +66,6 @@ class UploadScreen extends Component {
           error: res.error || null,
           loading: false,
         });
-        this.arrayholder = res.results;
       }).catch(error => {
           this.setState({ error, loading: false });
       });
@@ -149,14 +166,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   buttons: {
-    flex: 2,
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
   touchableOpacity: {
     borderWidth:1,
     backgroundColor:'black',
-    borderColor:'white',
+    borderColor:'#1e90ff',
     alignItems:'center',
     justifyContent:'center',
     width:100,
