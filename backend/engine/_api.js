@@ -114,7 +114,7 @@ class api {
             form: {
                 'grant_type': 'authorization_code',
                 'code': code,
-                'redirect_uri': redirect_uri
+                'redirect_uri': 'https://auth.expo.io/@solomon.joseph/AUX4All'
             }
         };
         request(options, (error, response, body) => {
