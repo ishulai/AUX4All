@@ -191,7 +191,7 @@ export default createMaterialBottomTabNavigator({
 }, {
   initialRouteName: "Upload",
   order: ['Upload', 'Music'],
-  activeTintColor: 'blue',
+  activeTintColor: '#1e90ff',
   inactiveTintColor: 'grey',
   barStyle: {backgroundColor: 'black'}
 });
