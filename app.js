@@ -64,34 +64,40 @@ app.get('/', function(req, res) {
 	
 	//spotAPI('getUserPlaylists', { 'user' : 'solthums'});
 	//spotAPI('searchTracks', { 'keyword' : 'Love' }, obj => console.log(obj));
-	spotAPI('getTrack', { track : '3Qm86XLflmIXVm1wcwkgDK'}, obj => console.log(obj));
+	//spotAPI('getTrack', { track : '3Qm86XLflmIXVm1wcwkgDK'}, obj => console.log(obj));
 	
 })
 
 app.get('/play', function(req, res) {
     var spotifyApi = new SpotifyWebApi();
-    //Untested b/c don't have a user token
 	function playSong(user_token, uri){
 		var options = {
 			url: 'https://api.spotify.com/v1/me/player/play',
 			method: 'PUT',
 			headers: {
-				'Authorization': 'Basic ' + user_token,
-				'Content-Type': 'application/x-www-form-urlencoded'
+				'Authorization': 'Bearer ' + user_token,
+				'Content-Type': 'application/json'
 			},
-			form: {
-				context_uri: uri
-			}
+			body: JSON.stringify({
+				'uris': [uri]
+			})
 		};
-		request(options);
+		request(options, (error, response, body) => {
+			console.log(body)
+			if (!error && response.statusCode == 200) {
+				var info = JSON.parse(body);
+				console.log(body);
+			}
+		});
 	}
 
-    
+    //Thomas
+	"BQCFA3M0ZSQ0XIuci9tJsW56loyUJZTt4M5VlX05QDG_1GbYaslBqLJKKQJNZ6vXpYuMhwoks64NMb2ap35AU8mto9HITBgcHCsa0zMgVdaktX2ZKFFBbPe5rV9s4p4DzHPcQ-6icngDAl76-aOHjBVt4LX23F48tbkOGB34Hg"
 	
 	//spotAPI('getUserPlaylists', { 'user' : 'solthums'});
 	//spotAPI('searchTracks', { 'keyword' : 'Love' }, obj => console.log(obj));
-	playSong("token", "spotify:track:1301WleyT98MSxVHPZCA6M")
-	
+	playSong(	"BQBEEN61tUF4Vweg1AuU9y_W0eySYV_8vwQjPGmxZrV5DKaTEH5vUOmbeOg3fj95X5Z2ef5-99wOQwMuQ1DqAduPpGAp4DFw4x7oP_kELyA0M3d61Y8Kx5-klWX4e_2qo93DcS3Wiw9G6myyxgg6Sk8", "spotify:track:1301WleyT98MSxVHPZCA6M");
+	res.send("hi");
 })
 
 
