@@ -83,11 +83,7 @@ class UploadScreen extends Component {
     );
   };
 
-  addSongToQueue = (item) => {
-    console.log(`Adding ${item.title}`);
-  }
   render() {
-    console.log(this.state.data)
     return (
       <SafeAreaView>
         <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
@@ -102,7 +98,7 @@ class UploadScreen extends Component {
                 containerStyle={{ borderBottomWidth: 0, backgroundColor: 'black' }}
                 keyExtractor={item => item.uri}
                 rightIcon={{name: "ios-add-circle", type: "ionicon"}}
-                onPress={() => this.addSongToQueue(item)}
+                onPress={() => this.addSong(item)}
               />
             )}
             ItemSeparatorComponent={this.renderSeparator}
@@ -115,25 +111,55 @@ class UploadScreen extends Component {
 }
 
 class MusicScreen extends Component {
+  constructor() {
+    super();
+    this.state = {
+      voted: false,
+    };
+  }
   render() {
     return (
-    <View style={styles.container}>
-      <Text style={styles.text}>
-        Now Playing
-      </Text>
-
+      <View style={styles.container}>
+      <View>
+        <Text style={styles.text}>
+          Now Playing
+        </Text>
+        /*<Image
+          style={{width: 50, height: 50}}
+          source={songdata.current_song.album_cover}
+          />*/
+      </View>
       <View style={styles.buttons}>
-        <TouchableOpacity style={styles.touchableOpacity}>
-
+        <TouchableOpacity style={styles.touchableOpacity} onPress={this.vote(1)}>
           <Icon name={"ios-thumbs-up"}  size={60} color="green" />
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.touchableOpacity}>
+        <TouchableOpacity style={styles.touchableOpacity} onPress={this.vote(-1)}>
           <Icon name={"ios-thumbs-down"}  size={60} color="red" />
         </TouchableOpacity>
       </View>
-    </View>
+      </View>
     );
+  }
+
+  vote = (value) => {
+    const url = 'http://localhost:8080/vote';
+    if (this.state.voted == true) {
+      this.setState(voted: false)
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          pin: roomPin,
+          value: value,
+        }),
+      }).catch(error => {
+            this.setState({ error, loading: false });
+        });
+    }
   }
 }
 
@@ -162,13 +188,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'black',
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
   },
   buttons: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-evenly'
   },
   touchableOpacity: {
     borderWidth:1,

@@ -4,7 +4,7 @@ import { createStackNavigator } from 'react-navigation';
 import { AuthSession } from 'expo';
 
 const APP_ID = 'a875e545029e40339ef4a1aa070312ea';
-const scopes = 'user-modify-playback-state user-read-currently-playing'
+const scopes = 'user-modify-playback-state user-read-playback-state user-read-currently-playing'
 export default class HomeScreen extends Component {
   constructor() {
     super();
@@ -25,6 +25,7 @@ export default class HomeScreen extends Component {
       });
       this.setState({ token : result.params.code});
       this.createRoom(result.params.code)
+      console.log(result.params.code);
   }
 
   createRoom = (token) => {
@@ -47,6 +48,29 @@ export default class HomeScreen extends Component {
         });
         userId = this.state.data.user_id
         roomPin = this.state.data.pin
+        window.setInterval(function(){
+          const url = 'http://localhost:8080/getstatus';
+          fetch(url, {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              pin: roomPin,
+            }),
+          }).then(res => res.json())
+            .then(res => {
+              this.setState({
+                data: res,
+                error: res.error || null,
+                loading: false,
+              });
+              songdata = this.state.data
+            }).catch(error => {
+                this.setState({ error, loading: false });
+            });
+        }, 3000);
         this.props.navigation.navigate("CodeScreen");
       }).catch(error => {
           this.setState({ error, loading: false });

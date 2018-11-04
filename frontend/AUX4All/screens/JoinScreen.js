@@ -57,6 +57,30 @@ export default class JoinScreen extends Component {
         });
         userId = this.state.data.user_id
         if (userId != false) {
+          roomPin = pin
+          window.setInterval(function(){
+            const url = 'http://localhost:8080/getstatus';
+            fetch(url, {
+              method: 'POST',
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                pin: roomPin,
+              }),
+            }).then(res => res.json())
+              .then(res => {
+                this.setState({
+                  data: res,
+                  error: res.error || null,
+                  loading: false,
+                });
+                songdata = this.state.data
+              }).catch(error => {
+                  this.setState({ error, loading: false });
+              });
+          }, 3000);
           this.props.navigation.navigate("TabScreen");
         } else {
           this.setState({status: true})

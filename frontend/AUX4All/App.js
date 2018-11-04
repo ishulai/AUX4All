@@ -5,6 +5,8 @@ import TabScreen from './screens/TabScreen.js'
 import JoinScreen from './screens/JoinScreen.js'
 import CodeScreen from './screens/CodeScreen.js'
 
+console.disableYellowBox = true;
+
 
 const RootStack = createStackNavigator(
   {
