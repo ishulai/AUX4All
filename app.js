@@ -63,7 +63,7 @@ app.get('/', function(req, res) {
     }
 	
 	//spotAPI('getUserPlaylists', { 'user' : 'solthums'});
-	//spotAPI('searchTracks', { 'keyword' : 'Love' }, obj => console.log(obj));
+	spotAPI('searchTracks', { 'keyword' : 'Africa' }, obj => console.log(obj));
 	//spotAPI('getTrack', { track : '3Qm86XLflmIXVm1wcwkgDK'}, obj => console.log(obj));
 	
 })
@@ -90,14 +90,40 @@ app.get('/play', function(req, res) {
 			}
 		});
 	}
-
-    //Thomas
-	"BQCFA3M0ZSQ0XIuci9tJsW56loyUJZTt4M5VlX05QDG_1GbYaslBqLJKKQJNZ6vXpYuMhwoks64NMb2ap35AU8mto9HITBgcHCsa0zMgVdaktX2ZKFFBbPe5rV9s4p4DzHPcQ-6icngDAl76-aOHjBVt4LX23F48tbkOGB34Hg"
 	
-	//spotAPI('getUserPlaylists', { 'user' : 'solthums'});
-	//spotAPI('searchTracks', { 'keyword' : 'Love' }, obj => console.log(obj));
-	playSong(	"BQBEEN61tUF4Vweg1AuU9y_W0eySYV_8vwQjPGmxZrV5DKaTEH5vUOmbeOg3fj95X5Z2ef5-99wOQwMuQ1DqAduPpGAp4DFw4x7oP_kELyA0M3d61Y8Kx5-klWX4e_2qo93DcS3Wiw9G6myyxgg6Sk8", "spotify:track:1301WleyT98MSxVHPZCA6M");
+	function getCurSong(user_token, callback){
+		var options = {
+			url: 'https://api.spotify.com/v1/me/player/currently-playing',
+			method: 'GET',
+			headers: {
+				'Authorization': 'Bearer ' + user_token,
+				'Content-Type': 'application/json'
+			},
+		};
+		request(options, (error, response, body) => {
+			if (!error && response.statusCode == 200) {
+				var track = JSON.parse(body);
+				var song = track.item
+				if (track.is_playing){
+					callback({
+							uri : song.uri,
+							title : song.name, 
+							artist : song.artists.map(artist => artist.name).join(", "),
+							album : song.album.name, 
+							album_cover : song.album.images[0].url,
+							time_left: (song.duration_ms - track.progress_ms)/1000
+				})}
+				else{
+					callback(false)
+				}
+			}
+		});
+	}
+	
+	var user_token = "BQALtdLuYzc0O2uYlfx44x0F3erbzLYx7cHWTRqHlSkQOM1EuPiG_uPafRDYJDfJgrxojIPhvW61rl4m8-U8aBvFOgIlC5jbDToSOD7PdFAQU1L1cN9ADFK-SDmB9zaTkV1GjmEmpxGqvZT5aRdIZiB4KF5EkyjIux8cl6A7QPHz9-A"
+	//playSong(user_token, "spotify:track:297Or4DielLdpBLJdgIQ7S");
 	res.send("hi");
+	setInterval(function(){getCurSong(user_token, obj => console.log(obj))}, 3000);
 })
 
 
