@@ -5,7 +5,6 @@ class song {
     constructor(uri) {
         this.uri = uri;
         this.id = this._uuid();
-        this.votes = [];
         this.title = "";
         this.artist = "";
         this.album = "";
@@ -13,12 +12,8 @@ class song {
         this.loadTrackInfo();
     }
 
-    upvote(userId) {
-        this.votes.push(new vote(userId, 1));
-    }
-
-    downvote(userId) {
-        this.votes.push(new vote(userId, -1));
+    getUri() {
+        return this.uri;
     }
 
     countVotes() {
@@ -42,9 +37,6 @@ class song {
     toJson() {
         return {
             song_id: this.id,
-            upvotes: this.votes.filter(vote => vote.getValue() === 1).length,
-            downvotes: this.votes.filter(vote => vote.getValue() === -1).length,
-            votes: this.votes.filter(vote => vote.getValue() === 1).length - this.votes.filter(vote => vote.getValue() === -1).length,
             title: this.title,
             artist: this.artist,
             album: this.album,

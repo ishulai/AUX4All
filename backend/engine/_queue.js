@@ -5,8 +5,8 @@ class queue {
         this.songs = [];
     }
 
-    addSong(songId) {
-        this.songs.push(new song(songId));
+    addSong(uri) {
+        this.songs.push(new song(uri));
     } 
 
     getNext() {

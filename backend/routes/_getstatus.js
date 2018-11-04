@@ -1,9 +1,11 @@
 const getStatus = (router, engine) => {
     router.post("/getstatus", (req, res) => {
         const pin = req.body.pin;
+
+        engine.updatePlayState(pin);
+        
         res.send({
-            current_song: engine.getCurrentSong(pin),
-            next_song: engine.getNextSong(pin)
+            current_song: engine.getCurrentSong(pin)
         })
     });
 }

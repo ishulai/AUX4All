@@ -1,10 +1,11 @@
 const queue = require("./_queue");
+const vote = require("./_vote");
 
 class user {
     constructor() {
         this.id = this._uuid();
         this.queue = new queue();
-        this.votes = [];
+        this.votes = [new vote(1)];
     }
 
     upvote() {
@@ -16,6 +17,7 @@ class user {
     }
 
     getVotes() {
+        console.log(this.votes.map(v => v.getValue()));
         return this.votes.map(v => v.getValue()).reduce((a, b) => a + b);
     }
 
@@ -27,8 +29,8 @@ class user {
         return this.queue.getNext();
     }
 
-    addSong(songId) {
-        this.queue.addSong(songId);
+    addSong(uri) {
+        this.queue.addSong(uri);
     }
 
     _uuid() {

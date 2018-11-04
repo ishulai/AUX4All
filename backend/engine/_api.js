@@ -41,7 +41,7 @@ class api {
                         }
                     }));
                 } else if (path == 'getTrack'){
-                    song = data.body;
+                    let song = data.body;
                     callback({
                         uri : song.uri,
                         title : song.name, 
@@ -54,6 +54,57 @@ class api {
                 console.error(err);
             });
     }
+
+	playSong(user_token, uri){
+        console.log(user_token, uri);
+		var options = {
+			url: 'https://api.spotify.com/v1/me/player/play',
+			method: 'PUT',
+			headers: {
+				'Authorization': 'Bearer ' + user_token,
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				'uris': [uri]
+			})
+		};
+		request(options, (error, response, body) => {
+			console.log(body)
+			if (!error && response.statusCode == 200) {
+				var info = JSON.parse(body);
+				console.log(body);
+			}
+		});
+	}
+    
+    getCurrentState(user_token, callback){
+		var options = {
+			url: 'https://api.spotify.com/v1/me/player/currently-playing',
+			method: 'GET',
+			headers: {
+				'Authorization': 'Bearer ' + user_token,
+				'Content-Type': 'application/json'
+			},
+		};
+		request(options, (error, response, body) => {
+			if (!error && response.statusCode == 200) {
+				var track = JSON.parse(body);
+				var song = track.item
+				if (track.is_playing){
+					callback({
+							uri : song.uri,
+							title : song.name, 
+							artist : song.artists.map(artist => artist.name).join(", "),
+							album : song.album.name, 
+							album_cover : song.album.images[0].url,
+							time_left: (song.duration_ms - track.progress_ms)/1000
+				})}
+				else{
+					callback(false)
+				}
+			}
+		});
+	}
 }
 
 module.exports = api;

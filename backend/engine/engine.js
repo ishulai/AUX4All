@@ -1,60 +1,46 @@
-const queue = require("./_queue");
-const user = require("./_user");
 const api = require("./_api");
 const room = require("./_room");
 
 class engine {
     constructor() {
-        this.users = [];
-        this.currentUser = -1;
-        this.currentSong = null;
-        this.nextSong = null;
         this.api = new api();
         this.rooms = [];
     }
 
     upvote(pin) {
-        this.rooms.find(r => room.getPin() === pin).upvote();
-        console.log(this);
+        this.rooms.find(r => r.getPin() === pin).upvote();
     }
 
     downvote(pin) {
-        this.rooms.find(r => room.getPin() === pin).downvote();
-        console.log(this);
+        this.rooms.find(r => r.getPin() === pin).downvote();
     }
 
     addSong(pin, userId, uri) {
-        this.rooms.find(r => room.getPin() === pin).addSong(userId, uri);
-        console.log(this);
+        this.rooms.find(r => r.getPin() === pin).addSong(userId, uri);
     }
 
-    getNextSong() {
-        console.log(this);
-        return this.rooms.find(r => room.getPin() === pin).getNextSong();
-    }
-
-    getCurrentSong() {
-        console.log(this);
-        return this.rooms.find(r => room.getPin() === pin).getCurrentSong();
+    getCurrentSong(pin) {
+        return this.rooms.find(r => r.getPin() === pin).getCurrentSong();
     }
 
     search(query, callback) {
         this.api.callAPI("searchTracks", { keyword: query }, results => {
-            console.log(results);
             callback(results);
         })
     }
 
-    createRoom() {
-        const r = new room();
+    createRoom(token) {
+        const r = new room(token);
         this.rooms.push(r);
-        console.log(this);
         return r.getPin();
     }
 
     joinRoom(pin) {
-        console.log(this);
-        return this.rooms.find(r => room.getPin() === pin).addUser();
+        return this.rooms.find(r => r.getPin() === pin).addUser();
+    }
+
+    updatePlayState(pin) {
+        this.rooms.find(r => r.getPin() === pin).updatePlayState();
     }
 }
 

@@ -1,14 +1,11 @@
 class vote {
-    constructor(userId, value) {
-        this.userId = userId;
+    constructor(value) {
         this.value = value; // -1 or 1
     }
 
     getValue() {
         return this.value;
     }
-
-    getUserId() {
-        return this.userId;
-    }
 }
+
+module.exports = vote;

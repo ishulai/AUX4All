@@ -1,15 +1,14 @@
-const queue = require("./_queue");
 const user = require("./_user");
 const api = require("./_api");
 
 class room {
-    constructor() {
-        this.pin = Math.random() * 999999 + "";
+    constructor(token) {
+        this.pin = Math.floor(Math.random() * 999999) + "";
         while(this.pin.length < 6) this.pin = "0" + this.pin;
+        this.token = token;
         this.users = [];
         this.currentUser = -1;
         this.currentSong = null;
-        this.nextSong = null;
         this.api = new api();
     }
 
@@ -24,9 +23,10 @@ class room {
         return u.getId();
     }
 
-    nextSong() {
+    playNextSong() {
         let inactiveUsers = [];
         this.nextUser();
+        console.log(this.currentUser);
         let s = this.users[this.currentUser].getNext();
         while (s === false) {
             if (inactiveUsers.find(u => u.getId() !== this.currentUser.getId())) inactiveUsers.push(this.currentUser);
@@ -34,22 +34,20 @@ class room {
             this.nextUser();
             s = this.users[this.currentUser].getNext();
         }
-        this.currentSong = this.nextSong;
-        this.nextSong = s;
+        this.currentSong = s;
+        this.api.playSong(this.token, this.currentSong.getUri());
         return this.currentSong;
     }
 
     nextUser() {
-        function weightedRand(spec) {
-            var table = [];
-            for (var i = 0; i < spec.length; i++) {
-                for (var j = 0; j < spec[i] * 10; j++) {
-                    table.push(i);
-                }
+        var table = [];
+        this.users.forEach((u, i) => {
+            console.log(u.getVotes());
+            for(let j = 0; j < u.getVotes(); j++) {
+                table.push(i);
             }
-            return table[Math.floor(Math.random() * table.length)];
-        }
-        this.currentUser = weightedRand(this.users.map(u => u.getVotes()));
+        });
+        this.currentUser = table[Math.floor(Math.random() * table.length)];
     }
 
     upvote() {
@@ -69,11 +67,14 @@ class room {
     }
 
     getCurrentSong() {
-        return this.currentSong.toJson();
+        //return this.currentSong.toJson();
+        return "hi";
     }
 
-    getNextSong() {
-        return this.nextSong.toJson();
+    updatePlayState() {
+        this.api.getCurrentState(this.token, state => {
+            if(state === false) this.playNextSong();
+        });
     }
 }
 

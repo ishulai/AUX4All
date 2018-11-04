@@ -3,7 +3,7 @@ const createRoom = (router, engine) => {
         const params = req.body;
         const token = params.token;
         const pin = engine.createRoom(token);
-        const user_id = engine.addUser(pin);
+        const user_id = engine.joinRoom(pin);
         res.send({
             pin: pin,
             user_id: user_id
