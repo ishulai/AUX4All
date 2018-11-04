@@ -3,6 +3,7 @@ import { StyleSheet, Image, Text, View, SafeAreaView, FlatList, TouchableOpacity
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons'
 import {List, ListItem, SearchBar} from 'react-native-elements';
+
 class UploadScreen extends Component {
   constructor() {
     super();
@@ -28,6 +29,7 @@ class UploadScreen extends Component {
   };
 
   addSong = (item) => {
+    console.log(item);
     const url = 'http://localhost:8080/addsong';
     fetch(url, {
       method: 'POST',
@@ -42,10 +44,11 @@ class UploadScreen extends Component {
       }),
     }).catch(error => {
           this.setState({ error, loading: false });
+          console.error(error);
       });
   }
   testSearchQuery = (text) => {
-    if (((text.length % 3) == 0) && (text.length !=0)) {
+    if (((text.length % 1) == 0) && (text.length !=0)) {
       this.searchQuery(text);
     }
   }
@@ -72,7 +75,7 @@ class UploadScreen extends Component {
         });
       }).catch(error => {
           this.setState({ error, loading: false });
-          console.log(error);
+          console.error(error);
       });
   }
 
@@ -120,44 +123,76 @@ class MusicScreen extends Component {
     super();
     this.state = {
       voted: false,
+      time: null,
+      uri: ""
     };
+    this.interval = null;
   }
+
+  componentDidMount() {
+    this.interval = setInterval(() => this.setState({ time: Date.now() }), 2000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
   render() {
-    return (
-      <View style={styles.container}>
-      <View alignItems="center">
-        <Text style={styles.text}>
-          Now Playing
-        </Text>
-        <Image
-          style={{width: 200, height: 200, marginTop: 36}}
-          source={{uri: songData.current_song.album_cover}}
+    try {
+      console.log(this.state.voted);
+      if(songData.current_song.uri != this.state.uri) {
+        this.setState({uri: songData.current_song.uri});
+        this.resetVotes();
+      }
+      return (
+        <View style={styles.container}>
+        <View alignItems="center">
+          <Text style={styles.text}>
+            Now Playing
+          </Text>
+          <Image
+            style={{width: 200, height: 200, marginTop: 36}}
+            source={{uri: songData.current_song.album_cover}}
 
-          />
-        <Text style={styles.baseText}>
-          {songData.current_song.title}
-        </Text>
-        <Text style={styles.baseText}>
-          {songData.current_song.artist}
-        </Text>
-      </View>
-      <View style={styles.buttons}>
-        <TouchableOpacity style={styles.touchableOpacity} onPress={this.vote(1)}>
-          <Icon name={"ios-thumbs-up"}  size={60} color="green" />
-        </TouchableOpacity>
+            />
+          <Text style={styles.baseText}>
+            {songData.current_song.title}
+          </Text>
+          <Text style={styles.baseText}>
+            {songData.current_song.artist}
+          </Text>
+        </View>
+        <View style={styles.buttons}>
+          <TouchableOpacity style={styles.touchableOpacity} onPress={() => this.vote(1)}>
+            <Icon name={"ios-thumbs-up"}  size={60} color="green" />
+          </TouchableOpacity>
 
-        <TouchableOpacity style={styles.touchableOpacity} onPress={this.vote(-1)}>
-          <Icon name={"ios-thumbs-down"}  size={60} color="red" />
-        </TouchableOpacity>
-      </View>
-      </View>
-    );
+          <TouchableOpacity style={styles.touchableOpacity} onPress={() => this.vote(-1)}>
+            <Icon name={"ios-thumbs-down"}  size={60} color="red" />
+          </TouchableOpacity>
+        </View>
+        </View>
+      );
+    } catch(e) {
+      return (
+        <View style={styles.container}>
+        <View alignItems="center">
+          <Text style={styles.baseText}>
+            No song currently playing.
+          </Text>
+        </View>
+        </View>
+      );
+    }
+  }
+
+  resetVotes = () => {
+    this.setState({voted: false});
   }
 
   vote = (value) => {
     const url = 'http://localhost:8080/vote';
-    if (this.state.voted == true) {
-      this.setState(voted: false)
+    if(this.state.voted === false) {
       fetch(url, {
         method: 'POST',
         headers: {
@@ -168,9 +203,12 @@ class MusicScreen extends Component {
           pin: roomPin,
           value: value,
         }),
+      }).then(obj => {
+        this.setState({loading: false, voted: true});
       }).catch(error => {
-            this.setState({ error, loading: false });
-        });
+        this.setState({ error, loading: false, voted: true });
+        console.error(error);
+      });
     }
   }
 }
