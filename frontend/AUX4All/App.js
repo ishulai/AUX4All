@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
-import { StyleSheet, Image, Text, View, SafeAreaView, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { StyleSheet, Image, Text, View, SafeAreaView, FlatList, TouchableOpacity} from 'react-native';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons'
 import {List, ListItem, SearchBar} from 'react-native-elements';
-
 class UploadScreen extends Component {
   constructor() {
     super();
@@ -11,6 +10,7 @@ class UploadScreen extends Component {
       loading: false,
       data: [],
       error: null,
+      query: "",
     };
   }
 
@@ -27,11 +27,6 @@ class UploadScreen extends Component {
       );
   };
 
-  testSearchQuery = (text) => {
-    if (text.length >=3) {
-      this.searchQuery(text);
-    }
-  }
   searchQuery = (text) => {
     const url = 'http://localhost:8080/search';
     this.setState({ loading: true,
@@ -65,7 +60,7 @@ class UploadScreen extends Component {
         placeholder="Please Enter a Song"
         darkTheme
         round
-        onChangeText={text => this.testSearchQuery(text)}
+        onChangeText={text => this.searchQuery(text)}
         autoCorrect={false}
       />
     );
@@ -75,13 +70,6 @@ class UploadScreen extends Component {
     console.log(`Adding ${item.title}`);
   }
   render() {
-    if (this.state.loading) {
-      return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <ActivityIndicator />
-        </View>
-      );
-    }
     console.log(this.state.data)
     return (
       <SafeAreaView>
