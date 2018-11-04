@@ -3,8 +3,9 @@ import { View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 import { AuthSession } from 'expo';
 
-const APP_ID = 'a875e545029e40339ef4a1aa070312ea';
+const APP_ID = '81d45c5a55ea49b3bd0433b88f691aca';
 const scopes = 'user-modify-playback-state user-read-playback-state user-read-currently-playing'
+
 export default class HomeScreen extends Component {
   constructor() {
     super();
@@ -15,21 +16,21 @@ export default class HomeScreen extends Component {
 
   authorize = async () => {
     let redirectUrl = AuthSession.getRedirectUrl();
-      let result = await AuthSession.startAsync({
-        authUrl:
-          `https://accounts.spotify.com/authorize?` +
-          `response_type=code` +
-          `&client_id=${APP_ID}` +
-          `&scope=${encodeURIComponent(scopes)}` +
-          `&redirect_uri=${encodeURIComponent(redirectUrl)}` +
-          '&show_dialog=true',
-      });
-      this.setState({ token : result.params.code});
-      this.createRoom(result.params.code)
-
+    console.log(redirectUrl);
+    let result = await AuthSession.startAsync({
+      authUrl:
+        `https://accounts.spotify.com/authorize?` +
+        `response_type=code` +
+        `&client_id=${APP_ID}` +
+        `&scope=${encodeURIComponent(scopes)}` +
+        `&redirect_uri=${encodeURIComponent(redirectUrl)}` +
+        '&show_dialog=true',
+    });
+    this.setState({ token : result.params.code});
+    this.createRoom(result.params.code, redirectUrl)
   }
 
-  createRoom = (token) => {
+  createRoom = (token, redirectUrl) => {
     const url = 'http://localhost:8080/createroom';
     fetch(url, {
       method: 'POST',
@@ -39,6 +40,7 @@ export default class HomeScreen extends Component {
       },
       body: JSON.stringify({
         token: token,
+        redirect_uri: redirectUrl
       }),
     }).then(res => res.json())
       .then(res => {
@@ -50,7 +52,8 @@ export default class HomeScreen extends Component {
         userId = this.state.data.user_id
         roomPin = this.state.data.pin
         this.props.navigation.navigate("CodeScreen");
-        window.setInterval(function(){
+
+        window.setInterval(() => {
           const url = 'http://localhost:8080/getstatus';
           fetch(url, {
             method: 'POST',
@@ -71,11 +74,13 @@ export default class HomeScreen extends Component {
                 loading: false,
               });
             }).catch(error => {
-                this.setState({ error, loading: false });
+                console.error(error);
+                //this.setState({ loading: false });
             });
         }, 3000);
       }).catch(error => {
-          this.setState({ error, loading: false });
+          console.error(error);
+          //this.setState({ err: error, loading: false });
       });
   }
 

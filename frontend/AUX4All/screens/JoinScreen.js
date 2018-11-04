@@ -6,8 +6,9 @@ import renderIf from 'render-if'
 export default class JoinScreen extends Component {
   constructor() {
     super();
-    this.state = {code: '',
-                  status: false}
+    this.state = {
+      code: '',
+      status: false}
   }
 
   render() {
@@ -58,7 +59,7 @@ export default class JoinScreen extends Component {
         userId = this.state.data.user_id
         if (userId != false) {
           roomPin = pin
-          window.setInterval(function(){
+          window.setInterval(() => {
             const url = 'http://localhost:8080/getstatus';
             fetch(url, {
               method: 'POST',
@@ -79,6 +80,7 @@ export default class JoinScreen extends Component {
                 });
               }).catch(error => {
                   this.setState({ error, loading: false });
+                  console.error(error);
               });
           }, 3000);
           this.props.navigation.navigate("TabScreen");
@@ -87,6 +89,7 @@ export default class JoinScreen extends Component {
         }
       }).catch(error => {
           this.setState({ error, loading: false });
+          console.error(error);
       });
   }
 }
