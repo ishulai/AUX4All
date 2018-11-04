@@ -9,11 +9,11 @@ class user {
     }
 
     upvote() {
-        this.votes.push(new vote(userId, 1));
+        this.votes.push(new vote(1));
     }
 
     downvote() {
-        this.votes.push(new vote(userId, -1));
+        this.votes.push(new vote(-1));
     }
 
     getVotes() {
@@ -26,6 +26,10 @@ class user {
 
     getNext() {
         return this.queue.getNext();
+    }
+
+    viewNext() {
+        return this.queue.viewNext();
     }
 
     addSong(uri) {

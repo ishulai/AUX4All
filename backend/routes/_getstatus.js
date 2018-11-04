@@ -1,5 +1,6 @@
 const getStatus = (router, engine) => {
     router.post("/getstatus", (req, res) => {
+        console.log("POST: getstatus");
         const pin = req.body.pin;
 
         engine.updatePlayState(pin);

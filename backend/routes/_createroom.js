@@ -1,6 +1,8 @@
 const createRoom = (router, engine) => {
     router.post("/createroom", (req, res) => {
+        console.log("POST: createroom");
         const params = req.body;
+        console.log(params);
         const token = params.token;
         const redirect_uri = params.redirect_uri;
         const pin = engine.createRoom(token, redirect_uri);

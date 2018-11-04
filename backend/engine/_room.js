@@ -16,7 +16,7 @@ class room {
             this.token = t;
             setInterval(() => {
                 this.updatePlayState();
-            }, 1000);
+            }, 2000);
         });
         this.downvotes = 0;
     }
@@ -33,29 +33,29 @@ class room {
     }
 
     playNextSong() {
-        let inactiveUsers = [];
-        this.nextUser();
+        let activeUsers = this.users.filter(u => u.viewNext());
+        if(activeUsers.length == 0) return false;
+        this.nextUser(activeUsers);
         let s = this.users[this.currentUser].getNext();
-        while (s === false) {
-            if (inactiveUsers.find(u => u.getId() !== this.currentUser.getId())) inactiveUsers.push(this.currentUser);
-            if (inactiveUsers.length === this.users.length) return false;
-            this.nextUser();
-            s = this.users[this.currentUser].getNext();
-        }
         this.currentSong = s;
         this.api.playSong(this.token, this.currentSong.getUri());
+        this.playState = this.currentSong.toJson();
         this.downvotes = 0;
         return this.currentSong;
     }
 
-    nextUser() {
+    nextUser(users) {
+        if(users.length == 1) {
+            this.currentUser = 0;
+            return;
+        }
         var table = [];
-        this.users.forEach((u, i) => {
+        users.forEach((u, i) => {
             for(let j = 0; j < u.getVotes(); j++) {
                 table.push(i);
             }
         });
-        this.currentUser = table[Math.floor(Math.random() * table.length)];
+        this.currentUser = users.findIndex(u => u.getId() === users[table[Math.floor(Math.random() * table.length)]].getId());
     }
 
     upvote() {
@@ -86,8 +86,8 @@ class room {
             else {
                 if(this.playState === null) this.playState = state;
                 else if(this.playState.uri !== state.uri) {
-                    this.playNextSong();
                     this.playState = state;
+                    this.playNextSong();
                 }
             }
         });

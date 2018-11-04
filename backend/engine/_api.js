@@ -11,11 +11,13 @@ class api {
             url: 'https://accounts.spotify.com/api/token',
             method: 'POST',
             headers: {
-                'Authorization': 'Basic YTg3NWU1NDUwMjllNDAzMzllZjRhMWFhMDcwMzEyZWE6NGQyMWQwM2Q5ZmU4NDdjMmJiMmY1ZWM2MTZiZmM5Mjc=',
+                //'Authorization': 'Basic ODFkNDVjNWE1NWVhNDliM2JkMDQzM2I4OGY2OTFhY2E6ZDU3NzNjNzcwZTgwNDkxY2E4ZjIzYTZlMDQxYzBlNjU=',
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
             form: {
-                'grant_type': 'client_credentials'
+                'grant_type': 'client_credentials',
+                'client_id': '81d45c5a55ea49b3bd0433b88f691aca',
+                'client_secret': 'd5773c770e80491ca8f23a6e041c0e65'
             }
         };
         request(options, (error, response, body) => {
@@ -81,7 +83,7 @@ class api {
             headers: {
                 'Authorization': 'Bearer ' + user_token,
                 'Content-Type': 'application/json'
-            },
+            }
         };
         request(options, (error, response, body) => {
             if (!error && response.statusCode == 200) {
@@ -104,17 +106,21 @@ class api {
     }
 
     codeToToken(code, redirect_uri, callback) {
+        console.log("hi");
+        console.log(redirect_uri);
         var options = {
             url: 'https://accounts.spotify.com/api/token',
             method: 'POST',
             headers: {
-                'Authorization': 'Basic YTg3NWU1NDUwMjllNDAzMzllZjRhMWFhMDcwMzEyZWE6NGQyMWQwM2Q5ZmU4NDdjMmJiMmY1ZWM2MTZiZmM5Mjc=',
+                //'Authorization': 'Basic ODFkNDVjNWE1NWVhNDliM2JkMDQzM2I4OGY2OTFhY2E6ZDU3NzNjNzcwZTgwNDkxY2E4ZjIzYTZlMDQxYzBlNjU=',
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
             form: {
                 'grant_type': 'authorization_code',
                 'code': code,
-                'redirect_uri': 'https://auth.expo.io/@solomon.joseph/AUX4All'
+                'redirect_uri': redirect_uri,
+                'client_id': '81d45c5a55ea49b3bd0433b88f691aca',
+                'client_secret': 'd5773c770e80491ca8f23a6e041c0e65'
             }
         };
         request(options, (error, response, body) => {

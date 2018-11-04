@@ -1,5 +1,6 @@
 const addSong = (router, engine) => {
     router.post("/addsong", (req, res) => {
+        console.log("POST: addsong");
         const params = req.body;
         const pin = params.pin;
         const user_id = params.user_id;
