@@ -12,4 +12,3 @@ users.forEach((u, i) => {
         table.push(i);
     }
 });
-console.log(table[Math.floor(Math.random() * table.length)]);

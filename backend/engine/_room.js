@@ -10,6 +10,11 @@ class room {
         this.currentUser = -1;
         this.currentSong = null;
         this.api = new api();
+        this.playState = null;
+        setInterval(() => {
+            this.updatePlayState();
+        }, 1000);
+        this.downvotes = 0;
     }
 
     getPin() {
@@ -26,7 +31,6 @@ class room {
     playNextSong() {
         let inactiveUsers = [];
         this.nextUser();
-        console.log(this.currentUser);
         let s = this.users[this.currentUser].getNext();
         while (s === false) {
             if (inactiveUsers.find(u => u.getId() !== this.currentUser.getId())) inactiveUsers.push(this.currentUser);
@@ -36,13 +40,13 @@ class room {
         }
         this.currentSong = s;
         this.api.playSong(this.token, this.currentSong.getUri());
+        this.downvotes = 0;
         return this.currentSong;
     }
 
     nextUser() {
         var table = [];
         this.users.forEach((u, i) => {
-            console.log(u.getVotes());
             for(let j = 0; j < u.getVotes(); j++) {
                 table.push(i);
             }
@@ -51,11 +55,13 @@ class room {
     }
 
     upvote() {
-        this.currentSong.upvote();
+        this.users[this.currentUser].upvote();
     }
 
     downvote() {
-        this.currentSong.downvote();
+        this.users[this.currentUser].downvote();
+        this.downvotes++;
+        if(this.downvotes === this.users.length) this.playNextSong();
     }
 
     addSong(userId, uri) {
@@ -74,6 +80,13 @@ class room {
     updatePlayState() {
         this.api.getCurrentState(this.token, state => {
             if(state === false) this.playNextSong();
+            else {
+                if(this.playState === null) this.playState = state;
+                else if(this.playState.uri !== state.uri) {
+                    this.playNextSong();
+                    this.playState = state;
+                }
+            }
         });
     }
 }

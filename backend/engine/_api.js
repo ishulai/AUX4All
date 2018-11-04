@@ -56,7 +56,6 @@ class api {
     }
 
 	playSong(user_token, uri){
-        console.log(user_token, uri);
 		var options = {
 			url: 'https://api.spotify.com/v1/me/player/play',
 			method: 'PUT',
@@ -69,10 +68,8 @@ class api {
 			})
 		};
 		request(options, (error, response, body) => {
-			console.log(body)
 			if (!error && response.statusCode == 200) {
 				var info = JSON.parse(body);
-				console.log(body);
 			}
 		});
 	}
@@ -96,8 +93,7 @@ class api {
 							title : song.name, 
 							artist : song.artists.map(artist => artist.name).join(", "),
 							album : song.album.name, 
-							album_cover : song.album.images[0].url,
-							time_left: (song.duration_ms - track.progress_ms)/1000
+							album_cover : song.album.images[0].url
 				})}
 				else{
 					callback(false)

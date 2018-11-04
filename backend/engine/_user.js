@@ -17,7 +17,6 @@ class user {
     }
 
     getVotes() {
-        console.log(this.votes.map(v => v.getValue()));
         return this.votes.map(v => v.getValue()).reduce((a, b) => a + b);
     }
 
