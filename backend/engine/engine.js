@@ -36,7 +36,8 @@ class engine {
     }
 
     joinRoom(pin) {
-        return this.rooms.find(r => r.getPin() === pin).addUser();
+        const r = this.rooms.find(r => r.getPin() === pin);
+        return r !== undefined ? this.rooms.find(r => r.getPin() === pin).addUser() : false;
     }
 
     updatePlayState(pin) {
