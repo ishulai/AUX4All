@@ -76,8 +76,7 @@ class room {
     }
 
     getCurrentSong() {
-        //return this.currentSong.toJson();
-        return "hi";
+        return (this.currentSong) ? this.currentSong.toJson() : null;
     }
 
     updatePlayState() {
