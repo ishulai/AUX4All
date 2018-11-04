@@ -75,8 +75,8 @@ class room {
         return this.users.map(user => user.toJson());
     }
 
-    getCurrentSong() {
-        return (this.currentSong) ? this.currentSong.toJson() : null;
+    getCurrentSong(callback) {
+        this.api.getCurrentState(this.token, state => callback(state));
     }
 
     updatePlayState() {

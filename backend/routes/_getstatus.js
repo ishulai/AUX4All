@@ -3,10 +3,12 @@ const getStatus = (router, engine) => {
         const pin = req.body.pin;
 
         engine.updatePlayState(pin);
-        
-        res.send({
-            current_song: engine.getCurrentSong(pin)
-        })
+
+        engine.getCurrentSong(pin, song => {
+            res.send({
+                current_song: song
+            })
+        });
     });
 }
 

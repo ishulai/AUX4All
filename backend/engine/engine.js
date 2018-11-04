@@ -19,8 +19,8 @@ class engine {
         this.rooms.find(r => r.getPin() === pin).addSong(userId, uri);
     }
 
-    getCurrentSong(pin) {
-        return this.rooms.find(r => r.getPin() === pin).getCurrentSong();
+    getCurrentSong(pin, callback) {
+        return this.rooms.find(r => r.getPin() === pin).getCurrentSong(callback);
     }
 
     search(query, callback) {
