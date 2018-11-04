@@ -1,56 +1,41 @@
 const queue = require("./_queue");
 const user = require("./_user");
 const api = require("./_api");
+const room = require("./_room");
 
 class engine {
     constructor() {
         this.users = [];
         this.currentUser = -1;
         this.currentSong = null;
+        this.nextSong = null;
         this.api = new api();
+        this.rooms = [];
     }
 
-    addUser(nickname) {
-        const u = new user(nickname);
-        this.users.push(u);
-        if(this.currentUser === -1) this.currentUser = 0;
-        return u.getId();
+    upvote(pin) {
+        this.rooms.find(r => room.getPin() === pin).upvote();
+        console.log(this);
     }
 
-    getNext() {
-        this.nextUser();
-        let s = this.users[this.currentUser].getNext()
-        while(s === false) this.nextUser();
-        this.currentSong = s;
-        return s;
+    downvote(pin) {
+        this.rooms.find(r => room.getPin() === pin).downvote();
+        console.log(this);
     }
 
-    nextUser() {
-        this.currentUser = (this.currentUser + 1) % this.users.length;
+    addSong(pin, userId, uri) {
+        this.rooms.find(r => room.getPin() === pin).addSong(userId, uri);
+        console.log(this);
     }
 
-    upvote(userId) {
-        this.currentSong.upvote(userId);
-    }
-
-    downvote(userId) {
-        this.currentSong.downvote(userId);
-    }
-
-    addSong(userId, uri) {
-        this.users.find(user => user.getId() === userId).addSong(uri);
-    }
-
-    getUsers() {
-        return this.users.map(user => user.toJson());
-    }
-
-    getQueue() {
-        return [];
+    getNextSong() {
+        console.log(this);
+        return this.rooms.find(r => room.getPin() === pin).getNextSong();
     }
 
     getCurrentSong() {
-        return this.currentSong.toJson();
+        console.log(this);
+        return this.rooms.find(r => room.getPin() === pin).getCurrentSong();
     }
 
     search(query, callback) {
@@ -58,6 +43,18 @@ class engine {
             console.log(results);
             callback(results);
         })
+    }
+
+    createRoom() {
+        const r = new room();
+        this.rooms.push(r);
+        console.log(this);
+        return r.getPin();
+    }
+
+    joinRoom(pin) {
+        console.log(this);
+        return this.rooms.find(r => room.getPin() === pin).addUser();
     }
 }
 

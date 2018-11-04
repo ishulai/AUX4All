@@ -40,6 +40,15 @@ class api {
                             album_cover: song.album.images[0].url
                         }
                     }));
+                } else if (path == 'getTrack'){
+                    song = data.body;
+                    callback({
+                        uri : song.uri,
+                        title : song.name, 
+                        artist : song.artists.map(artist => artist.name).join(", "),
+                        album : song.album.name, 
+                        album_cover : song.album.images[0].url
+                    });
                 }
             }, function (err) {
                 console.error(err);

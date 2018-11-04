@@ -1,9 +1,9 @@
 const getStatus = (router, engine) => {
     router.post("/getstatus", (req, res) => {
+        const pin = req.body.pin;
         res.send({
-            users: engine.getUsers(),
-            queue: engine.getQueue(),
-            current_song: engine.getCurrentSong()
+            current_song: engine.getCurrentSong(pin),
+            next_song: engine.getNextSong(pin)
         })
     });
 }

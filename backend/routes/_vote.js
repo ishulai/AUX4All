@@ -1,9 +1,10 @@
 const vote = (router, engine) => {
     router.post("/vote", (req, res) => {
         const params = req.body;
-        const user_id = params.user_id;
+        const pin = params.pin;
         const value = params.value;
-        engine.vote(user_id, value);
+        if(value === -1) engine.upvote(pin);
+        else engine.upvote(pin);
         res.send(true);
     });
 }

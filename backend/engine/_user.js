@@ -1,18 +1,26 @@
 const queue = require("./_queue");
 
 class user {
-    constructor(nickname) {
+    constructor() {
         this.id = this._uuid();
-        this.nickname = nickname;
         this.queue = new queue();
+        this.votes = [];
+    }
+
+    upvote() {
+        this.votes.push(new vote(userId, 1));
+    }
+
+    downvote() {
+        this.votes.push(new vote(userId, -1));
+    }
+
+    getVotes() {
+        return this.votes.map(v => v.getValue()).reduce((a, b) => a + b);
     }
 
     getId() {
         return this.id;
-    }
-
-    getNickname() {
-        return this.nickname;
     }
 
     getNext() {
