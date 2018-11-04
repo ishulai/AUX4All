@@ -41,7 +41,8 @@ class engine {
     }
 
     updatePlayState(pin) {
-        this.rooms.find(r => r.getPin() === pin).updatePlayState();
+        const r = this.rooms.find(r => r.getPin() === pin);
+        if(r !== undefined) r.updatePlayState();
     }
 }
 
