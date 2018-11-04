@@ -44,7 +44,11 @@ class UploadScreen extends Component {
           this.setState({ error, loading: false });
       });
   }
-
+  testSearchQuery = (text) => {
+    if (((text.length % 3) == 0) && (text.length !=0)) {
+      this.searchQuery(text);
+    }
+  }
   searchQuery = (text) => {
     const url = 'http://localhost:8080/search';
     this.setState({ loading: true,
@@ -68,6 +72,7 @@ class UploadScreen extends Component {
         });
       }).catch(error => {
           this.setState({ error, loading: false });
+          console.log(error);
       });
   }
 
@@ -77,7 +82,7 @@ class UploadScreen extends Component {
         placeholder="Please Enter a Song"
         darkTheme
         round
-        onChangeText={text => this.searchQuery(text)}
+        onChangeText={text => this.testSearchQuery(text)}
         autoCorrect={false}
       />
     );
@@ -120,14 +125,21 @@ class MusicScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-      <View>
+      <View alignItems="center">
         <Text style={styles.text}>
           Now Playing
         </Text>
-        /*<Image
-          style={{width: 50, height: 50}}
-          source={songdata.current_song.album_cover}
-          />*/
+        <Image
+          style={{width: 200, height: 200, marginTop: 36}}
+          source={{uri: songData.current_song.album_cover}}
+
+          />
+        <Text style={styles.baseText}>
+          {songData.current_song.title}
+        </Text>
+        <Text style={styles.baseText}>
+          {songData.current_song.artist}
+        </Text>
       </View>
       <View style={styles.buttons}>
         <TouchableOpacity style={styles.touchableOpacity} onPress={this.vote(1)}>
@@ -188,7 +200,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'black',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
   },
   buttons: {
     flex: 1,
@@ -198,9 +210,10 @@ const styles = StyleSheet.create({
   touchableOpacity: {
     borderWidth:1,
     backgroundColor:'black',
-    borderColor:'#1e90ff',
+    borderColor:'white',
     alignItems:'center',
     justifyContent:'center',
+    marginTop: 36,
     width:100,
     height:100,
     borderRadius:100,
@@ -208,7 +221,14 @@ const styles = StyleSheet.create({
   text: {
     color: 'white',
     fontSize: 36,
-    marginTop: 48,
+    marginBottom: 24,
+    marginTop: 12,
+    textAlign: 'center'
+  },
+  baseText: {
+    color: 'white',
+    marginTop: 36,
+    fontSize: 24,
     textAlign: 'center'
   },
 });

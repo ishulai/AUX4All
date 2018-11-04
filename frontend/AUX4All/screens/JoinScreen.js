@@ -71,12 +71,12 @@ export default class JoinScreen extends Component {
               }),
             }).then(res => res.json())
               .then(res => {
+                songData = res
                 this.setState({
                   data: res,
                   error: res.error || null,
                   loading: false,
                 });
-                songdata = this.state.data
               }).catch(error => {
                   this.setState({ error, loading: false });
               });

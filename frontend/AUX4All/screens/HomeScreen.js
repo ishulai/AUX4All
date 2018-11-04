@@ -21,11 +21,12 @@ export default class HomeScreen extends Component {
           `response_type=code` +
           `&client_id=${APP_ID}` +
           `&scope=${encodeURIComponent(scopes)}` +
-          `&redirect_uri=${encodeURIComponent(redirectUrl)}`,
+          `&redirect_uri=${encodeURIComponent(redirectUrl)}` +
+          '&show_dialog=true',
       });
       this.setState({ token : result.params.code});
       this.createRoom(result.params.code)
-      console.log(result.params.code);
+
   }
 
   createRoom = (token) => {
@@ -48,6 +49,7 @@ export default class HomeScreen extends Component {
         });
         userId = this.state.data.user_id
         roomPin = this.state.data.pin
+        this.props.navigation.navigate("CodeScreen");
         window.setInterval(function(){
           const url = 'http://localhost:8080/getstatus';
           fetch(url, {
@@ -61,17 +63,17 @@ export default class HomeScreen extends Component {
             }),
           }).then(res => res.json())
             .then(res => {
+              songData = res
+              console.log(songData.current_song.album_cover)
               this.setState({
                 data: res,
                 error: res.error || null,
                 loading: false,
               });
-              songdata = this.state.data
             }).catch(error => {
                 this.setState({ error, loading: false });
             });
         }, 3000);
-        this.props.navigation.navigate("CodeScreen");
       }).catch(error => {
           this.setState({ error, loading: false });
       });
