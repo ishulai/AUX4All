@@ -5,15 +5,18 @@ class room {
     constructor(token) {
         this.pin = Math.floor(Math.random() * 999999) + "";
         while(this.pin.length < 6) this.pin = "0" + this.pin;
-        this.token = token;
+        this.token = "";
         this.users = [];
         this.currentUser = -1;
         this.currentSong = null;
         this.api = new api();
         this.playState = null;
-        setInterval(() => {
-            this.updatePlayState();
-        }, 1000);
+        this.api.codeToToken(token, t => {
+            this.token = t;
+            setInterval(() => {
+                this.updatePlayState();
+            }, 1000);
+        });
         this.downvotes = 0;
     }
 
