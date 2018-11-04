@@ -87,7 +87,8 @@ class api {
             if (!error && response.statusCode == 200) {
                 var track = JSON.parse(body);
                 var song = track.item
-                if (track.is_playing) {
+                if(track.progress_ms === 0) callback(false);
+                else if (track.is_playing) {
                     callback({
                         uri: song.uri,
                         title: song.name,
