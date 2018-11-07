@@ -55,7 +55,7 @@ class room {
                 table.push(i);
             }
         });
-        this.currentUser = users.findIndex(u => u.getId() === users[table[Math.floor(Math.random() * table.length)]].getId());
+        this.currentUser = this.users.findIndex(u => u.getId() === users[table[Math.floor(Math.random() * table.length)]].getId());
     }
 
     upvote() {
